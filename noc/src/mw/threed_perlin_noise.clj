@@ -11,23 +11,35 @@
   (let [scale 20]
     {:scale scale :rows (/ (q/height) scale) :cols (/ (q/width) scale)}))
 
-  (defn draw-state [{:keys [scale rows cols]}]
-    (q/background 255)
-    ;;(q/translate 0 50)
-    ;;(q/rotate-x (/ Math/PI  3));
-    (q/begin-shape :triangle-strip)
-    (->> (for [y (range 0 cols) 
-               x (range 0 rows)]
-           [ x
-             y 
-            (q/map-range (q/noise (* x 0.1)) 0 1 0 50)])
-         
-          (map (fn [[x y z]] 
-                       (q/vertex (* x scale) (* y scale)) 
-                       (q/vertex (* x scale) (* (inc y) scale))))
-          (doall))
-    (q/end-shape)
-    {:scale scale :rows rows :cols cols})
+(defn draw-state [{:keys [scale rows cols]}]
+  (q/background 255)
+  (q/translate 0 50)
+  (q/rotate-x (/ Math/PI  3));
+  (q/begin-shape)
+  (->> (loop [y 0
+              x 0
+              res []
+              sub []]
+         (if (and (= y rows) (= x cols)) 
+           res
+           (if (= x cols) 
+             (recur (inc y) 0 (concat res [[sub]]) [])
+             (recur y (inc x) res (concat sub [[[x y] [x (inc y)]]])))))
+         (println))
+       
+       #_(->> (for [y (range 0 cols) 
+                    x (range 0 rows)]
+                [ x
+                 y 
+                 (q/map-range (q/noise (* x 0.1)) 0 1 0 50)])
+              ;; todo - begin shape must happen for row of x, or we are connecting rows. 
+              (map (fn [[x y z]] 
+                     (q/vertex (* x scale) (* y scale)) 
+                     (q/vertex (* x scale) (* (inc y) scale))))
+              (doall))
+       #_(q/end-shape)
+       
+       {:scale scale :rows rows :cols cols})
 
 
   (defn update-state [state]
