@@ -14,56 +14,53 @@
 (defn draw-state [{:keys [scale rows cols]}]
   (q/background 255)
   (q/translate 0 50)
-  (q/rotate-x (/ Math/PI  3));
-  (q/begin-shape)
-  (->> (loop [y 0
-              x 0
-              res []
-              sub []]
-         (if (and (= y rows) (= x cols)) 
-           res
-           (if (= x cols) 
-             (recur (inc y) 0 (concat res [[sub]]) [])
-             (recur y (inc x) res (concat sub [[[x y] [x (inc y)]]])))))
-         (println))
-       
-       #_(->> (for [y (range 0 cols) 
-                    x (range 0 rows)]
-                [ x
-                 y 
-                 (q/map-range (q/noise (* x 0.1)) 0 1 0 50)])
-              ;; todo - begin shape must happen for row of x, or we are connecting rows. 
-              (map (fn [[x y z]] 
-                     (q/vertex (* x scale) (* y scale)) 
-                     (q/vertex (* x scale) (* (inc y) scale))))
-              (doall))
-       #_(q/end-shape)
-       
-       {:scale scale :rows rows :cols cols})
+  #_(q/rotate-x (/ Math/PI  3));
+  (doall (->> (loop [y 0
+                     x 0
+                     res []
+                     sub []]
+                (if (and (= y rows) (= x cols)) 
+                  (vec res)
+                  (if (= x cols) 
+                    (recur (inc y) 0 (vec (concat res [sub])) [])
+                    (recur y (inc x) res (vec (concat sub [[[x y] [x (inc y)]]]))))))
+              (map (fn [strip]
+                     (println "STRIP:" strip)
+                     (q/begin-shape :triangle-strip)
+                     (doall (map (fn [[[x y][x2 y2]]] 
+                       (q/vertex (* x scale) (* y scale))
+                       (q/vertex (* x2 scale) (* y2 scale))) strip))
+                   (q/end-shape)))
+              ))
+         ))
 
 
-  (defn update-state [state]
-    state)
 
-  (defn screen 
-    ([& {:keys [title update-state-fn draw-state-fn setup-fn]
-         :or {title "Sketch"
-              update-state-fn update-state
-              setup-fn setup
-              draw-state-fn draw-state}}]
-     (q/sketch
-      :title title 
-      :size [400 400]
-      :setup setup-fn
-      :renderer :p3d
-      :update update-state-fn
-      :draw draw-state-fn
-      :features [:keep-on-top]
-      :middleware [m/fun-mode])))
+{:scale scale :rows rows :cols cols})
 
-  (defn -main
-    "I don't do a whole lot ... yet."
-    [& args]
-    (screen))
+
+(defn update-state [state]
+state)
+
+(defn screen 
+([& {:keys [title update-state-fn draw-state-fn setup-fn]
+     :or {title "Sketch"
+          update-state-fn update-state
+          setup-fn setup
+          draw-state-fn draw-state}}]
+ (q/sketch
+  :title title 
+  :size [400 400]
+  :setup setup-fn
+  :renderer :p3d
+  :update update-state-fn
+  :draw draw-state-fn
+  :features [:keep-on-top]
+  :middleware [m/fun-mode])))
+
+(defn -main
+"I don't do a whole lot ... yet."
+[& args]
+(screen))
 
 
