@@ -14,25 +14,24 @@
 (defn draw-state [{:keys [scale rows cols]}]
   (q/background 255)
   (q/translate 0 50)
-  #_(q/rotate-x (/ Math/PI  3));
+  (q/rotate-x (/ Math/PI  3));
   (doall (->> (loop [y 0
                      x 0
                      res []
                      sub []]
-                (if (and (= y rows) (= x cols)) 
+                (if (and (> y rows) (> x cols)) 
                   (vec res)
-                  (if (= x cols) 
+                  (if (> x cols) 
                     (recur (inc y) 0 (vec (concat res [sub])) [])
-                    (recur y (inc x) res (vec (concat sub [[[x y] [x (inc y)]]]))))))
+                    (recur y (inc x) res (vec (concat sub [[[x y] 
+                                                            [x (inc y)]]]))))))
               (map (fn [strip]
-                     (println "STRIP:" strip)
                      (q/begin-shape :triangle-strip)
                      (doall (map (fn [[[x y][x2 y2]]] 
                        (q/vertex (* x scale) (* y scale))
                        (q/vertex (* x2 scale) (* y2 scale))) strip))
                    (q/end-shape)))
               ))
-         ))
 
 
 
