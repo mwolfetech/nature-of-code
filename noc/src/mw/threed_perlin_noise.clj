@@ -23,15 +23,14 @@
                   (vec res)
                   (if (> x cols) 
                     (recur (inc y) 0 (vec (concat res [sub])) [])
-                    (recur y (inc x) res (vec (concat sub [[[x y] 
-                                                            [x (inc y)]]]))))))
+                    (recur y (inc x) res (vec (concat sub [[[x y (q/map-range (q/noise (* x 0.2)  (* y 0.2)) 0 1 -50 50)] 
+                                                            [x (inc y) (q/map-range (q/noise (* x 0.2) (* (inc y) 0.2)) 0 1 -50 50)]]]))))))
               (map (fn [strip]
                      (q/begin-shape :triangle-strip)
-                     (doall (map (fn [[[x y][x2 y2]]] 
-                       (q/vertex (* x scale) (* y scale))
-                       (q/vertex (* x2 scale) (* y2 scale))) strip))
-                   (q/end-shape)))
-              ))
+                     (doall (map (fn [[[x y z][x2 y2 z2]]] 
+                       (q/vertex (* x scale) (* y scale) z)
+                       (q/vertex (* x2 scale) (* y2 scale) z2)) strip))
+                   (q/end-shape)))))
 
 
 
