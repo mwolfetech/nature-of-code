@@ -1,8 +1,9 @@
+;; based on https://thecodingtrain.com/challenges/11-3d-terrain-generation-with-perlin-noise
+
 (ns mw.threed-perlin-noise
   (:gen-class)
   (:require [quil.core :as q]
             [quil.middleware :as m]))
-
 
 (defn setup []
   (q/background 255)
@@ -12,9 +13,11 @@
     {:scale scale :rows (/ (q/height) scale) :cols (/ (q/width) scale)}))
 
 (defn draw-state [{:keys [scale rows cols]}]
-  (q/background 255)
-  (q/translate 0 50)
-  (q/rotate-x (/ Math/PI  3));
+  (q/background 0)
+  (q/translate 0 150)
+  (q/rotate-x (/ Math/PI  3))
+  (q/fill 200 200 200 150)
+  #_(q/translate (/ (- (q/width)) 2)(/ (- (q/height))  2))
   (doall (->> (loop [y 0
                      x 0
                      res []
@@ -23,8 +26,8 @@
                   (vec res)
                   (if (> x cols) 
                     (recur (inc y) 0 (vec (concat res [sub])) [])
-                    (recur y (inc x) res (vec (concat sub [[[x y (q/map-range (q/noise (* x 0.2)  (* y 0.2)) 0 1 -50 50)] 
-                                                            [x (inc y) (q/map-range (q/noise (* x 0.2) (* (inc y) 0.2)) 0 1 -50 50)]]]))))))
+                    (recur y (inc x) res (vec (concat sub [[[x y (q/map-range (q/noise (* x 0.3)  (* y 0.3)) 0 1 -100 100)] 
+                                                            [x (inc y) (q/map-range (q/noise (* x 0.3) (* (inc y) 0.3)) 0 1 -100 100)]]]))))))
               (map (fn [strip]
                      (q/begin-shape :triangle-strip)
                      (doall (map (fn [[[x y z][x2 y2 z2]]] 
@@ -48,7 +51,7 @@ state)
           draw-state-fn draw-state}}]
  (q/sketch
   :title title 
-  :size [400 400]
+  :size [600 600]
   :setup setup-fn
   :renderer :p3d
   :update update-state-fn
