@@ -4,8 +4,6 @@
             [quil.middleware :as m]
             [clojure.core.matrix :as mx]))
 
-(set! *warn-on-reflection* true)
-
 (defn ball [position speed]
   {:position position :speed speed})
 
@@ -51,6 +49,5 @@
     :middleware [m/fun-mode])))
 
 (defn -main
-  "I don't do a whole lot ... yet."
   [& args]
   (screen))
