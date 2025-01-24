@@ -3,8 +3,8 @@
   (:require [clojure.core.matrix :as m]))
 
 
-(defprotocol IVector
-  (add [this v])
+(defprotocol IVectorsa
+  (add ^Vector [^Vector this ^Vector that])
   ;; (set [x])
   ;; (set [x y])
   ;; (set [x y z])
@@ -20,7 +20,7 @@
   ;; (div [x])
   ;; (div [x y])
   ;; (div [x y z])
-  ;; (mag [this])
+  ;; (mag [this]) 
   ;; (mag-sq [this])
   ;; (dot [this v])
   ;; (cross [this v])
@@ -35,7 +35,7 @@
   ;; (lerp [this v amt])
   ;; (slerp [this v amt])
   ;; (refect [this amt])
-  (array [this])
+  (get-array [this])
   ;; (equals [this x])
   ;; (equals [this x y])
   ;; (equals [this x y z])
@@ -45,16 +45,14 @@
   ;; (random-3d)
   ;; (clamp-to-zero [this])
 )
-  
+ 
+(defn vector-add [a b]
+  (m/add a b)) 
 
-(defn vector-add [ this v]
-   (Vector. (m/add this v)))
+(deftype Vector [^:volatile-mutable va]
+  IVectorsa
+  (add [this that] (set! va (vector-add va (.-va ^Vector that))) this)
+  (get-array [this] (m/clone va)))
 
-
-(deftype Vector [va]
-  IVector
-  (add [this v] (vector-add va (.array ^Vector v)))
-  (array [this] va))
-
-(defn make-vector [x y z]
+(defn ^Vector make-vector [x y z]
   (Vector. (m/array [x y z]))) 
