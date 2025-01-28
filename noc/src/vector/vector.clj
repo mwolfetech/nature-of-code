@@ -5,7 +5,7 @@
 
 (defprotocol IVector
   (add ^Vector [^Vector this ^Vector that])
-  ;;(set [this x] [this x y] [this x y z])
+  (set ^Vector [^Vector this x] [^Vector this x y] [^Vector this x y z])
   ;; (rem [x] [x y] [x y z]) 
   ;; (sub [x] [x y] [x y z])
   ;; (mult [x] [x y] [x y z])
@@ -37,7 +37,19 @@
 (deftype Vector [^:volatile-mutable va]
   IVector
   (add [this that] (m/add! va (.-va ^Vector that)) this)
-  (array [this] (double-array (m/clone va))))
+  (array [this] (double-array (m/clone va)))
+  (set [this x] (-> (m/zero-vector 3)
+                        (m/mset 0 x)
+                        (Vector.)))
+  (set [this x y] (-> (m/zero-vector 3)
+                        (m/mset 1 y)
+                        (m/mset 0 x)
+                        (Vector.)))
+  (set [this x y z] (-> (m/zero-vector 3)
+                        (m/mset 2 z)
+                        (m/mset 1 y)
+                        (m/mset 0 x)
+                        (Vector.))))
 
 (defn ^Vector make-vector [x y z]
   (m/set-current-implementation :vectorz)
