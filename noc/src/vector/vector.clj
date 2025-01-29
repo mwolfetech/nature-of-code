@@ -6,7 +6,8 @@
 (defprotocol IVector
   (add ^Vector [^Vector this ^Vector that])
   (set ^Vector [^Vector this x] [^Vector this x y] [^Vector this x y z])
-  ;; (rem [x] [x y] [x y z]) 
+  (rem ^Vector [^Vector this amt])
+  ;; (rem [x y] [x y z]) 
   ;; (sub [x] [x y] [x y z])
   ;; (mult [x] [x y] [x y z])
   ;; (div [x] [x y] [x y z])
@@ -49,7 +50,8 @@
                         (m/mset 2 z)
                         (m/mset 1 y)
                         (m/mset 0 x)
-                        (Vector.))))
+                        (Vector.)))
+  (rem [this amt] (m/emap! #(clojure.core/rem (int %) amt) va) this))
 
 (defn ^Vector make-vector [x y z]
   (m/set-current-implementation :vectorz)
