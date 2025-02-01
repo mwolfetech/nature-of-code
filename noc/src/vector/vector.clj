@@ -7,8 +7,8 @@
   (add ^Vector [^Vector this ^Vector that])
   (set ^Vector [^Vector this x] [^Vector this x y] [^Vector this x y z])
   (rem ^Vector [^Vector this amt] [^Vector this x y] [^Vector this x y z])
-  ;; (rem [x y z]) 
-  ;; (sub [x] [x y] [x y z])
+  (sub ^Vector [^Vector this amt])
+  ;; (sub [x y] [x y z])
   ;; (mult [x] [x y] [x y z])
   ;; (div [x] [x y] [x y z])
   ;; (mag [this]) 
@@ -19,7 +19,7 @@
   ;; (normalize [this v])
   ;; (limit [this, limit])
   ;; (set-mag [this, mag])
-  ;; (heading [this])
+  ;; (heading [this])  
   ;; (set-heading [this angle])
   ;; (rotate [this, amt])
   ;; (angle-between [this v])
@@ -57,6 +57,7 @@
   (rem [this x y z] (m/assign! va [(clojure.core/rem (m/mget va 0) x)
                                    (clojure.core/rem (m/mget va 1) y)
                                    (clojure.core/rem (m/mget va 2) z)]) this)
+  (sub [this amt] (m/emap! #(- (int %) amt) va) this)
 )
 
 (defn ^Vector make-vector [x y z]
