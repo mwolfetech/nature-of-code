@@ -7,7 +7,7 @@
   (add ^Vector [^Vector this ^Vector that])
   (set ^Vector [^Vector this x] [^Vector this x y] [^Vector this x y z])
   (rem ^Vector [^Vector this amt] [^Vector this x y] [^Vector this x y z])
-  (sub ^Vector [^Vector this amt])
+  (sub ^Vector [^Vector this amt] [^Vector this x y] [^Vector this x y z])
   ;; (sub [x y] [x y z])
   ;; (mult [x] [x y] [x y z])
   ;; (div [x] [x y] [x y z])
@@ -58,6 +58,11 @@
                                    (clojure.core/rem (m/mget va 1) y)
                                    (clojure.core/rem (m/mget va 2) z)]) this)
   (sub [this amt] (m/emap! #(- (int %) amt) va) this)
+  (sub [this x y] (m/assign! (m/subvector va 0 2) [(- (m/mget va 0) x) 
+                                                   (- (m/mget va 1) y)]) this)
+  (sub [this x y z] (m/assign! va [(- (m/mget va 0) x)
+                                   (- (m/mget va 1) y)
+                                   (- (m/mget va 2) z)]) this)
 )
 
 (defn ^Vector make-vector [x y z]
