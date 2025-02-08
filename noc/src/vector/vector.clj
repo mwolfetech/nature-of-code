@@ -11,7 +11,7 @@
   (mult ^Vector [^Vector this amt] [^Vector this x y] [^Vector this x y z])
   (div ^Vector [^Vector this amt] [^Vector this x y] [^Vector this x y z])
   (mag [^Vector this]) 
-  ;; (mag-sq [this]) 
+  (mag-sq [this]) 
   ;; (dot [this v])
   ;; (cross [this v])
   ;; (dist [this v])
@@ -75,6 +75,7 @@
                                    (/ (m/mget va 1) y)
                                    (/ (m/mget va 2) z)]) this)
   (mag [this] (m/length va))
+  (mag-sq [this] (m/length-squared va))
 )
 
 (defn ^Vector make-vector [x y z]
