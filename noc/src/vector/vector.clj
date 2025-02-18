@@ -13,7 +13,7 @@
   (mag [^Vector this]) 
   (mag-sq [^Vector this]) 
   (dot [^Vector this ^Vector that])
-  ;; (cross [this v])
+  (cross [this v])
   ;; (dist [this v])
   ;; (normalize [this v])
   ;; (limit [this, limit])
@@ -37,15 +37,15 @@
 (deftype Vector [^:volatile-mutable va]
   IVector
   (add [this that] (m/add! va (.-va ^Vector that)) this)
-  (array [this] (double-array (m/clone va)))
-  (set [this x] (-> (m/zero-vector 3)
-                        (m/mset 0 x)
+  (array [_] (double-array (m/clone va)))
+  (set [_ x] (-> (m/zero-vector 3)
+                          (m/mset 0 x)
                         (Vector.)))
-  (set [this x y] (-> (m/zero-vector 3)
+  (set [_ x y] (-> (m/zero-vector 3)
                         (m/mset 1 y)
                         (m/mset 0 x)
                         (Vector.)))
-  (set [this x y z] (-> (m/zero-vector 3)
+  (set [_ x y z] (-> (m/zero-vector 3)
                         (m/mset 2 z)
                         (m/mset 1 y)
                         (m/mset 0 x)
@@ -74,12 +74,13 @@
   (div [this x y z] (m/assign! va [(/ (m/mget va 0) x)
                                    (/ (m/mget va 1) y)
                                    (/ (m/mget va 2) z)]) this)
-  (mag [this] (m/length va))
-  (mag-sq [this] (m/length-squared va))
-  (dot [this that] (m/dot va (.-va ^Vector that)))
+  (mag [_] (m/length va))
+  (mag-sq [_] (m/length-squared va))
+  (dot [_ that] (m/dot va (.-va ^Vector that)))
+  (cross [_ that] (Vector.  (m/cross va (.-va ^Vector that))))
 )
 
-(defn ^Vector make-vector [x y z]
+(defn  make-vector ^Vector [x y z]
   (m/set-current-implementation :vectorz)
   (Vector. (m/array [x y z]))) 
 
