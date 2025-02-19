@@ -14,7 +14,7 @@
   (mag-sq [^Vector this]) 
   (dot [^Vector this ^Vector that])
   (cross [this v])
-  ;; (dist [this v])
+  (dist [this v])
   ;; (normalize [this v])
   ;; (limit [this, limit])
   ;; (set-mag [this, mag])
@@ -78,6 +78,7 @@
   (mag-sq [_] (m/length-squared va))
   (dot [_ that] (m/dot va (.-va ^Vector that)))
   (cross [_ that] (Vector.  (m/cross va (.-va ^Vector that))))
+  (dist [_ that]  (m/distance va (.-va ^Vector that))) 
 )
 
 (defn  make-vector ^Vector [x y z]
