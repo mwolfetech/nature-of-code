@@ -15,7 +15,7 @@
   (dot [^Vector this ^Vector that])
   (cross [this v])
   (dist [this v])
-  ;; (normalize [this v])
+  (normalize [this])
   ;; (limit [this, limit])
   ;; (set-mag [this, mag])
   ;; (heading [this])  
@@ -79,6 +79,7 @@
   (dot [_ that] (m/dot va (.-va ^Vector that)))
   (cross [_ that] (Vector.  (m/cross va (.-va ^Vector that))))
   (dist [_ that]  (m/distance va (.-va ^Vector that))) 
+  (normalize [this] (m/normalise! va) this)
 )
 
 (defn  make-vector ^Vector [x y z]
