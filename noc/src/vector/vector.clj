@@ -86,3 +86,6 @@
   (m/set-current-implementation :vectorz)
   (Vector. (m/array [x y z]))) 
 
+(defn normalize [^Vector v]
+    (.normalize (Vector. (.array v))))
+
