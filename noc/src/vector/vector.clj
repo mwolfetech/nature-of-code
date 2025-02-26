@@ -1,6 +1,7 @@
 (ns vector.vector 
   (:gen-class)
-  (:require [clojure.core.matrix :as m]))
+  (:require [clojure.core.matrix :as m]
+            [clojure.math :as ma]))
 
 
 (defprotocol IVector
@@ -18,7 +19,7 @@
   (normalize [this])
   ;; (limit [this, limit])
   ;; (set-mag [this, mag])
-  ;; (heading [this])  
+  (heading [this])  
   ;; (set-heading [this angle])
   ;; (rotate [this, amt])
   ;; (angle-between [this v])
@@ -80,6 +81,7 @@
   (cross [_ that] (Vector.  (m/cross va (.-va ^Vector that))))
   (dist [_ that]  (m/distance va (.-va ^Vector that))) 
   (normalize [this] (m/normalise! va) this)
+  (heading [this] (ma/to-degrees (ma/atan2 (m/mget va 1) (m/mget va 0))))
 )
 
 (defn  make-vector ^Vector [x y z]
