@@ -18,7 +18,7 @@
   (dist [this v])
   (normalize [this])
   (limit [this, limit])
-  ;; (set-mag [this, mag])
+  (set-mag [this, mag])
   (heading [this])  
   ;; (set-heading [this angle])
   ;; (rotate [this, amt])
@@ -83,6 +83,7 @@
   (normalize [this] (m/normalise! va) this)
   (limit [this limit-value] (m/scale! (m/normalise! va) limit-value) this)
   (heading [this] (ma/to-degrees (ma/atan2 (m/mget va 1) (m/mget va 0))))
+  (set-mag [this mag] (m/scale! va (/ mag (m/length va))) this)
 )
 
 (defn  make-vector ^Vector [x y z]
