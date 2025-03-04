@@ -20,7 +20,7 @@
   (limit [this, limit])
   (set-mag [this, mag])
   (heading [this])  
-  ;; (set-heading [this angle])
+  (set-heading [this angle])
   ;; (rotate [this, amt])
   ;; (angle-between [this v])
   ;; (lerp [this v amt])
@@ -34,7 +34,6 @@
   ;; (random-3d)
   ;; (clamp-to-zero [this])
 )
- 
 (deftype Vector [^:volatile-mutable va]
   IVector
   (add [this that] (m/add! va (.-va ^Vector that)) this)
@@ -84,11 +83,17 @@
   (limit [this limit-value] (m/scale! (m/normalise! va) limit-value) this)
   (heading [this] (ma/to-degrees (ma/atan2 (m/mget va 1) (m/mget va 0))))
   (set-mag [this mag] (m/scale! va (/ mag (m/length va))) this)
+  (set-heading [this heading] (let [ d (ma/to-radians heading)
+                                     c (m/normalise (m/cross va [1 0 0]))
+                                     f (m/cross  va c)] 
+                               (m/add (m/emap! #(* % (ma/cos d)) va) (m/emap #(* % (ma/sin d)) f))))
+                                    
 )
-
 (defn  make-vector ^Vector [x y z]
   (m/set-current-implementation :vectorz)
   (Vector. (m/array [x y z]))) 
+ 
+
 
 (defn normalize [^Vector v]
     (.normalize (Vector. (.array v))))
