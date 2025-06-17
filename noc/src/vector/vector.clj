@@ -34,6 +34,7 @@
   ;; (random-3d)
   ;; (clamp-to-zero [this])
 )
+
 (deftype Vector [^:volatile-mutable va]
   IVector
   (add [this that] (m/add! va (.-va ^Vector that)) this)
@@ -86,14 +87,12 @@
   (set-heading [this heading] (let [ d (ma/to-radians heading)
                                      c (m/normalise (m/cross va [1 0 0]))
                                      f (m/cross  va c)] 
-                               (m/add (m/emap! #(* % (ma/cos d)) va) (m/emap #(* % (ma/sin d)) f))))
-                                    
-)
+                               (m/add (m/emap! #(* % (ma/cos d)) va) (m/emap #(* % (ma/sin d)) f)))))
+
 (defn  make-vector ^Vector [x y z]
   (m/set-current-implementation :vectorz)
   (Vector. (m/array [x y z]))) 
  
-
 
 (defn normalize [^Vector v]
     (.normalize (Vector. (.array v))))
