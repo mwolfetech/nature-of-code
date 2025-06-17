@@ -9,8 +9,6 @@
   (q/stroke 0)
   (q/no-loop))
 
-
-
 (defn draw-state [state]
   (q/background 255)
   (let [px (q/pixels)]
@@ -22,7 +20,6 @@
                                color (q/color bright bright bright 255)]
                            (aset-int px idx color)))))))
   (q/update-pixels))
-
 
 (defn update-state [state]
   state)

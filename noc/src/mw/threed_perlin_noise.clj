@@ -34,11 +34,7 @@
                        (q/vertex (* x scale) (* y scale) z)
                        (q/vertex (* x2 scale) (* y2 scale) z2)) strip))
                    (q/end-shape)))))
-
-
-
 {:scale scale :rows rows :cols cols})
-
 
 (defn update-state [state]
 state)

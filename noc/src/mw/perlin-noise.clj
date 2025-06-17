@@ -49,8 +49,6 @@
   [& args]
   (screen))
 
-
-
 (comment 
    ;; Exercise 0.7 Perlin Steps
     (screen :title "0.7 Perlin Steps" :update-state (fn [_ {:keys [x y tx ty]}]

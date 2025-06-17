@@ -41,11 +41,8 @@
   [& args]
   (screen))
 
-
-
 (comment
   ;; Exercise 0.1
-
     (screen :title "Exercise 0.1 Down and to the right"
             :update-state-fn (partial update-state  
                                       (fn [] (condp <= (q/random 1)  
